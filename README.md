@@ -45,10 +45,15 @@ Everything is static — no build step, no dependencies.
 | `manifest.webmanifest` | Install metadata — standalone display, portrait, icons. |
 | `sw.js` | Service worker. Precaches the app shell so it runs with no network. |
 | `icon-*.png` | Launcher icons, including a maskable one for Android. |
-| `.github/workflows/pages.yml` | Publishes the repo root to GitHub Pages on every push to `main`. |
 
 **After changing anything here, bump `VERSION` in `sw.js`** — browsers keep the
 old cache until that string changes.
+
+## Publishing
+
+GitHub Pages serves this repo's `main` branch from the root, so any push to
+`main` republishes the game. `.nojekyll` keeps GitHub from running the files
+through Jekyll.
 
 ## Installing
 
