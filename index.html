@@ -672,12 +672,20 @@
   }
 
   /* ---------- selection ---------- */
-  function cellAt(clientX, clientY) {
+  var CORE = 0.42; // how close to a tile's centre a drag must pass to pick it up
+
+  function cellAt(clientX, clientY, precise) {
     var box = boardEl.getBoundingClientRect();
-    var c = Math.floor((clientX - box.left) / (box.width / COLS));
-    var r = Math.floor((clientY - box.top) / (box.height / ROWS));
+    var fx = (clientX - box.left) / (box.width / COLS);
+    var fy = (clientY - box.top) / (box.height / ROWS);
+    var c = Math.floor(fx), r = Math.floor(fy);
     if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return null;
     if (!grid[r][c]) return null;
+    if (precise) {
+      // corners are dead: a diagonal drag clips the tiles it passes without taking them
+      var dx = fx - c - 0.5, dy = fy - r - 0.5;
+      if (dx * dx + dy * dy > CORE * CORE) return null;
+    }
     return { r: r, c: c };
   }
   function indexOfSel(r, c) {
@@ -948,10 +956,15 @@
       powers.reveal -= 1;
       armed = null;
       sel = path;
-      revealT = 2600;
+      revealT = 760;
       buzz(12);
       renderPowers();
       refreshBar();
+      // show the word lit up on the board, then play it
+      var promised = selWord();
+      setTimeout(function () {
+        if (!over && selWord() === promised) submit();
+      }, 720);
       return;
     }
   }
@@ -1279,9 +1292,21 @@
   boardEl.addEventListener("pointermove", function (e) {
     if (!dragging || over) return;
     e.preventDefault();
-    var t = cellAt(e.clientX, e.clientY);
+    var t = cellAt(e.clientX, e.clientY, true);
     if (!t) return;
     if (indexOfSel(t.r, t.c) === sel.length - 1) return;
+
+    var last = sel[sel.length - 1];
+    if (last && !touches(last, t)) {
+      // moved fast and jumped one tile: if it sat exactly between them in a
+      // straight or diagonal line, the finger crossed it, so take it too
+      var dr = t.r - last.r, dc = t.c - last.c;
+      var straight = (dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc));
+      if (straight && Math.max(Math.abs(dr), Math.abs(dc)) === 2) {
+        var mid = { r: last.r + dr / 2, c: last.c + dc / 2 };
+        if (grid[mid.r][mid.c] && indexOfSel(mid.r, mid.c) < 0) addCell(mid);
+      }
+    }
     if (addCell(t)) everDragged = true;
   });
   function endDrag(e) {

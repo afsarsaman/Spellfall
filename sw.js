@@ -1,5 +1,5 @@
 /* Spellfall service worker — offline-first app shell */
-var VERSION = "spellfall-v2";
+var VERSION = "spellfall-v3";
 var SHELL = [
   "./",
   "./index.html",
