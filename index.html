@@ -510,7 +510,7 @@
   </div>
 
   <div class="bar" id="bar">
-    <div id="word" class="empty">Drag across touching letters</div>
+    <div id="word" class="empty">Tap or drag letters that touch</div>
     <div id="gain" hidden>+0</div>
     <div id="streak" hidden>×2</div>
   </div>
@@ -551,7 +551,7 @@
     <button class="key wide accent" id="k-submit" disabled>Submit</button>
   </div>
 
-  <div class="hint">Each word counts once &middot; spell well to earn more power-ups</div>
+  <div class="hint">Tap letters one by one, or drag &middot; each word counts once</div>
 </div>
 
 <div class="scrim" id="scrim"></div>
@@ -572,7 +572,7 @@
 (function () {
   "use strict";
 
-  var COLS = 7, ROWS = 9, MINW = 3;
+  var COLS = 6, ROWS = 7, MINW = 3;
   var WORDS = new Set(document.getElementById("lexicon").textContent.split(" "));
 
   var VALUE = {
@@ -734,7 +734,7 @@
     gainEl.classList.remove("dup", "bad");
     if (!w) {
       wordEl.className = "empty";
-      wordEl.textContent = "Drag across touching letters";
+      wordEl.textContent = "Tap or drag letters that touch";
       gainEl.hidden = true;
       submitBtn.disabled = true;
     } else {
@@ -976,7 +976,7 @@
     var total = found.reduce(function (a, f) { return a + f.pts; }, 0);
     document.getElementById("sheet-pts").textContent = total.toLocaleString();
     if (!found.length) {
-      sheetList.innerHTML = '<div class="empty-note">No words yet.<br>Drag across letters that touch — sideways, up, down or diagonally.</div>';
+      sheetList.innerHTML = '<div class="empty-note">No words yet.<br>Tap letters that touch, one by one — or drag across them.<br>Sideways, up, down or diagonally all count.</div>';
       return;
     }
     var topPts = 0;
@@ -1046,7 +1046,7 @@
     renderPowers();
   }
 
-  function rainEvery() { return Math.max(700, 2300 - (level - 1) * 130); }
+  function rainEvery() { return Math.max(850, 2600 - (level - 1) * 130); }
 
   /* ---------- rendering ---------- */
   function fitCanvas() {

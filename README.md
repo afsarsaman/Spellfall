@@ -4,8 +4,8 @@ A word game that installs to your home screen and plays offline.
 
 **Play: https://afsarsaman.github.io/spellfall/**
 
-Letters rain into a 7×9 well. Drag across letters that touch — sideways, up,
-down or diagonally — to spell a word. It scores and clears, everything above
+Letters rain into a 6×7 well. Tap letters that touch — sideways, up, down or
+diagonally — one by one, or drag across them, to spell a word. It scores and clears, everything above
 collapses, and the rain keeps coming. Each word counts once. Fill the well and
 it's over.
 
